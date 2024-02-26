@@ -16,7 +16,7 @@ verwijderd moeten kunnen worden;
 **Nadat deadline is verlopen bepaalt het systeem automatisch wie de winnaar is op basis van
 (ingezonde tijd) + (% overeenkomst). Dit moet gebeuren d.m.v. een formule die je zelf mag
 verzinnen. Degene met de snelste EN hoogste score wint!
-Het advies is om de volgende services te realiseren:
+*Het advies is om de volgende services te realiseren:*
 - Een authorization en authentication module;
 - Target service waar iemand een targetfoto naar toe kan sturen
 - Register service waarin deelnemers en target owners zich kunnen inschrijven met de
