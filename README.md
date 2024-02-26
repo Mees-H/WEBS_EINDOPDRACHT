@@ -17,19 +17,19 @@ verwijderd moeten kunnen worden;
 (ingezonde tijd) + (% overeenkomst). Dit moet gebeuren d.m.v. een formule die je zelf mag
 verzinnen. Degene met de snelste EN hoogste score wint!
 Het advies is om de volgende services te realiseren:
- Een authorization en authentication module;
- Target service waar iemand een targetfoto naar toe kan sturen
- Register service waarin deelnemers en target owners zich kunnen inschrijven met de
+- Een authorization en authentication module;
+- Target service waar iemand een targetfoto naar toe kan sturen
+- Register service waarin deelnemers en target owners zich kunnen inschrijven met de
 juiste rechten
- Een mail service, die een bevestiging van registratie mailt met gegenereerd inlog
+- Een mail service, die een bevestiging van registratie mailt met gegenereerd inlog
 credentials
 Daarnaast kan deze ook de scores sturen van alle deelnemers (Let Op alleen naar de
 target owner), en stuurt afzonderlijk de score van de ingelogde deelnemer na het
 verstrijken van de tijd
- Een clock service die gaat lopen zodra een target owner een foto heeft ge-upload
+- Een clock service die gaat lopen zodra een target owner een foto heeft ge-upload
 De service houdt van elke gestarte wedstrijd de tijd bij. Wanneer de eindtijd wordt
 bereikt moet de register service een seintje krijgen dat er niet meer ingeschreven kan
 worden op een bepaalde wedstrijd.
- Een aparte score service
- Een read service naar keuze: Hiermee kun je bijv. een overzicht opvragen van alle
+- Een aparte score service
+- Een read service naar keuze: Hiermee kun je bijv. een overzicht opvragen van alle
 huidige actieve wedstrijden 
