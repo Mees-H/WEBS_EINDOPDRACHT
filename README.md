@@ -7,6 +7,7 @@ Eisen:
 - Een target kunnen behalen door een gelijkende foto te uploaden (maar niet dezelfde);
 - Mijn score op een bepaalde target kunnen inzien;
 - Je kunt jou eigen upload verwijderen
+
 **Als eigenaar van een target wil ik…**
 - De scores inzien van alle deelnemers op mijn target;
 - Een target met locatie beschrijving kunnen uploaden;
