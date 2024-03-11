@@ -4,8 +4,9 @@ const url = require('url');
 const proxy = httpProxy.createProxy();
 const options = {
     //add services here
-    '/target': 'http://localhost:3001',
-    '/sharpshooter': 'http://localhost:3002',
+    '/target/create': 'http://localhost:3001/create',
+    // this service doesnt work yet with id's v v v
+    '/sharpshooter/create/:targetId': 'http://localhost:3002/create/:targetId',
 }
 
 require('http').createServer((req, res) => {

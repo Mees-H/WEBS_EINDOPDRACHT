@@ -3,8 +3,8 @@ const express = require('express')
 const app = express()
 const port = 3002;
 
-app.use('/', (req, res) => {
-    res.send('Sharpshooter Service')
+app.use('/create/:targetId', (req, res) => {
+    res.send('Sharpshooters send pictures for specific tagets through this endpoint for targetId ' + req.params.targetId)
 })
 
 app.listen(port, () => {
