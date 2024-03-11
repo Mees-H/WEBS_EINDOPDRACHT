@@ -1,14 +1,20 @@
-const express = require('express')
-const {ROUTES} = require("./routes");
-const {setupLogging} = require("./logging");
-const {setupProxies} = require("./proxy");
+const httpProxy = require('http-proxy');
+const url = require('url');
 
-const app = express()
-const port = 3000;
+const proxy = httpProxy.createProxy();
+const options = {
+    //add services here
+    '/target': 'http://localhost:3001',
+    '/sharpshooter': 'http://localhost:3002',
+}
 
-setupLogging(app);
-setupProxies(app, ROUTES);
-
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
+require('http').createServer((req, res) => {
+    const pathname = url.parse(req.url).pathname;
+    for (const [pattern, target] of Object.entries(options)) {
+        if (pathname === pattern || 
+            pathname.startsWith(pattern + '/')
+        ) {
+            proxy.web(req, res, {target});
+        }
+    }
+}).listen(3000);

@@ -1,10 +1,10 @@
 const express = require('express')
 
 const app = express()
-const port = 3001;
+const port = 3002;
 
 app.use('/', (req, res) => {
-    res.send('Rooster Service')
+    res.send('Sharpshooter Service')
 })
 
 app.listen(port, () => {
