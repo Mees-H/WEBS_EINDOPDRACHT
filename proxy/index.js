@@ -12,7 +12,6 @@ const options = {
 };
 
 function catchError(err, req, res, next) {
-    // Handle errors here, you can log them or send an appropriate response
     console.error(err);
     res.status(500).send('Internal Server Error');
 }
@@ -20,12 +19,36 @@ function catchError(err, req, res, next) {
 app.use(circuitBreaker({
     proxy: `http://localhost:${port}`,
     options: options,
-    catchError: catchError // Provide catchError function here
+    catchError: catchError 
 }));
 
-app.use('/targets/:id', proxy('http://localhost:3001'));
+// Targets GET, PUT, DELETE
+app.use('/targets/:id', proxy('http://localhost:3001', {
+    proxyReqPathResolver: function(req) {
+        return '/targets/' + req.params.id; 
+    }
+}));
 
-app.use('/sharpshooters/*', proxy('http://localhost:3002'));
+// Targets POST
+app.use('/targets', proxy('http://localhost:3001', {
+    proxyReqPathResolver: function(req) {
+        return '/targets';
+    }
+}));
+
+// Sharpshooters GET, PUT, DELETE
+app.use('/sharpshooters/:id', proxy('http://localhost:3001', {
+    proxyReqPathResolver: function(req) {
+        return '/sharpshooters/' + req.params.id; 
+    }
+}));
+
+// Sharpshooters POST
+app.use('/sharpshooters', proxy('http://localhost:3001', {
+    proxyReqPathResolver: function(req) {
+        return '/sharpshooters';
+    }
+}));
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
