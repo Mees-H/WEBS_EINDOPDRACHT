@@ -1,12 +1,15 @@
 const express = require('express')
 const bodyParser = require('body-parser');
-const url = "mongodb://localhost:27017/targets";
 const mongoose = require('mongoose');
+const amqp = require('amqplib/callback_api');
 
+// Express
 const app = express()
 const port = 3001;
 
-mongoose.connect(url);
+//MongoDB + Mongoose
+const mongoDBurl = "mongodb://localhost:27017/targets";
+mongoose.connect(mongoDBurl);
 
 const TargetSchema = new mongoose.Schema({ 
   latitude: {
@@ -31,6 +34,36 @@ const TargetSchema = new mongoose.Schema({
 
 const Target = mongoose.model('targets', TargetSchema);
 
+//RabbitMQ
+let rabbitMQChannel;
+const rabbitMQurl = 'amqp://localhost'; 
+
+function connectToRabbitMQ() {
+  amqp.connect(rabbitMQurl, function(error0, connection) {
+    if (error0) {
+      throw error0;
+    }
+    connection.createChannel(function(error1, channel) {
+      if (error1) {
+        throw error1;
+      }
+      rabbitMQChannel = channel;
+    });
+  });
+}
+
+connectToRabbitMQ();
+
+function sendMessageToQueue(queueName, message) {
+  if (rabbitMQChannel) {
+    rabbitMQChannel.assertQueue(queueName, { durable: false });
+    rabbitMQChannel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
+  } else {
+    throw new Error("RabbitMQ channel doesn't exist");
+  }
+}
+
+//Routes
 app.use(bodyParser.json());
 
 app.post('/targets', async (req, res) => {
@@ -38,21 +71,12 @@ app.post('/targets', async (req, res) => {
     const target = new Target(req.body);
     await target.validate();
     await target.save();
+
+    sendMessageToQueue('targetCreate', target.toObject());
+
     res.status(200).json({target: target, message: 'Successfully created target'});
   } catch (error) {
     res.status(500).send(error); 
-  }
-});
-
-app.get('/targets/:id', async (req, res) => {
-  try {
-    const target = await Target.findById(req.params.id);
-    if (!target) {
-      return res.status(404).json({ error: 'Target not found' });
-  }
-    res.status(200).json({target: target, message: 'Success'});
-  } catch (error) {
-    res.status(500).send(error);
   }
 });
 
@@ -62,6 +86,8 @@ app.put('/targets/:id', async (req, res) => {
     await target.validate();
     await Target.findByIdAndUpdate(req.params.id, req.body);
     
+    sendMessageToQueue('targetUpdate', target.toObject());
+
     res.status(200).json({target: target, message: 'Successfully updated target'});
   } catch (error) {
     res.status(500).send(error);
@@ -71,11 +97,15 @@ app.put('/targets/:id', async (req, res) => {
 app.delete('/targets/:id', async (req, res) => {
   try {
     const target = await Target.findByIdAndDelete(req.params.id);
+
+    sendMessageToQueue('targetDelete', target.toObject());
+    
     res.send({target: target, message: 'Successfully deleted target'});
   } catch (error) {
     res.status(500).send(error);
   }
 });
+
 
 
 app.listen(port, () => {
