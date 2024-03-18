@@ -5,6 +5,9 @@ const proxy = httpProxy.createProxy();
 const options = {
     //add services here
     '/target/create': 'http://localhost:3001/create',
+    '/target/get/:id': 'http://localhost:3001/get/:id',
+    '/target/update/:id': 'http://localhost:3001/update/:id',
+    '/target/delete/:id': 'http://localhost:3001/delete/:id',
     // this service doesnt work yet with id's v v v
     '/sharpshooter/create/:targetId': 'http://localhost:3002/create/:targetId',
 }
