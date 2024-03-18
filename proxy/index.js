@@ -1,24 +1,32 @@
-const httpProxy = require('http-proxy');
-const url = require('url');
+const express = require('express');
+const proxy = require('express-http-proxy');
+const circuitBreaker = require('express-circuit-breaker');
 
-const proxy = httpProxy.createProxy();
+const app = express();
+const port = 3000;
+
 const options = {
-    //add services here
-    '/target/create': 'http://localhost:3001/create',
-    '/target/get/:id': 'http://localhost:3001/get/:id',
-    '/target/update/:id': 'http://localhost:3001/update/:id',
-    '/target/delete/:id': 'http://localhost:3001/delete/:id',
-    // this service doesnt work yet with id's v v v
-    '/sharpshooter/create/:targetId': 'http://localhost:3002/create/:targetId',
+    timeout: 10000,
+    errorThreshold: 50,
+    resetTimeout: 30000
+};
+
+function catchError(err, req, res, next) {
+    // Handle errors here, you can log them or send an appropriate response
+    console.error(err);
+    res.status(500).send('Internal Server Error');
 }
 
-require('http').createServer((req, res) => {
-    const pathname = url.parse(req.url).pathname;
-    for (const [pattern, target] of Object.entries(options)) {
-        if (pathname === pattern || 
-            pathname.startsWith(pattern + '/')
-        ) {
-            proxy.web(req, res, {target});
-        }
-    }
-}).listen(3000);
+app.use(circuitBreaker({
+    proxy: `http://localhost:${port}`,
+    options: options,
+    catchError: catchError // Provide catchError function here
+}));
+
+app.use('/targets/:id', proxy('http://localhost:3001'));
+
+app.use('/sharpshooters/*', proxy('http://localhost:3002'));
+
+app.listen(port, () => {
+    console.log(`Server listening at http://localhost:${port}`);
+});

@@ -80,6 +80,15 @@ app.post('/targets', async (req, res) => {
   }
 });
 
+app.get('/targets/:id', async (req, res) => {
+  try {
+    const target = await Target.findById(req.params.id);
+    res.status(200).json({target: target, message: 'Successfully retrieved target'});
+  } catch (error) {
+    res.status(500).send(error) 
+  }
+});
+
 app.put('/targets/:id', async (req, res) => {
   try {
     const target = new Target(req.body);
