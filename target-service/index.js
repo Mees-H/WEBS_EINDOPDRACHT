@@ -9,7 +9,7 @@ const port = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
 
-app.use('', targetRoutes);
+app.use('/targets', targetRoutes);
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)

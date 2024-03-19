@@ -2,20 +2,30 @@
 version: '3'
 services:
 # Main app
-  main-app:
-    build: ./proxy
+  # main-app:
+  #   build: ./proxy
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - rabbitmq
+  #     - mongodb
+  #     - target-service
+  #     - sharpshooter-service
+  #   networks:
+  #     - default
+  #   volumes:
+  #     - ./proxy:/usr/src/app
+
+# Nginx
+  nginx:
+    image: nginx:latest
     ports:
-      - 3000:3000
+      - 3000:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - rabbitmq
-      - mongodb
       - target-service
       - sharpshooter-service
-    networks:
-      - default
-    volumes:
-      - ./proxy:/usr/src/app
-
 # RabbitMQ      
   rabbitmq:
     image: rabbitmq:3-management
@@ -33,7 +43,7 @@ services:
   mongodb:
     image: mongo
     ports:
-      - 27017:27017
+      - 27018:27017
     networks:
       - default
     volumes:
