@@ -1,0 +1,72 @@
+# docker-compose.yml
+version: '3'
+services:
+# Main app
+  main-app:
+    build: ./proxy
+    ports:
+      - 3000:3000
+    depends_on:
+      - rabbitmq
+      - mongodb
+      - target-service
+      - sharpshooter-service
+    networks:
+      - default
+    volumes:
+      - ./proxy:/usr/src/app
+      
+# RabbitMQ      
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - 5672:5672
+      - 15672:15672  
+    networks:
+      - default
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+# MongoDB
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    networks:
+      - default
+    volumes:
+      - ./mongodb/data:/data/db
+
+### Services
+
+# Target service
+  target-service:
+    build: ./target-service
+    ports:
+      - 3001:3001
+    depends_on:
+      - rabbitmq
+      - mongodb
+    networks:
+      - default
+    volumes:
+      - ./target-service:/usr/src/app
+# Sharpshooter service
+  sharpshooter-service:
+    build: ./sharpshooter-service
+    ports:
+      - 3002:3002
+    depends_on:
+      - rabbitmq
+      - mongodb
+    networks:
+      - default
+    volumes:
+      - ./sharpshooter-service:/usr/src/app
+
+# Network
+networks:
+  default:
+    driver: bridge

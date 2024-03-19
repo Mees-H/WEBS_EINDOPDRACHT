@@ -8,7 +8,7 @@ const app = express()
 const port = 3001;
 
 //MongoDB + Mongoose
-const mongoDBurl = "mongodb://localhost:27017/targets";
+const mongoDBurl = "mongodb://mongodb:27017/targets";
 mongoose.connect(mongoDBurl);
 
 const TargetSchema = new mongoose.Schema({ 
@@ -36,12 +36,13 @@ const Target = mongoose.model('targets', TargetSchema);
 
 //RabbitMQ
 let rabbitMQChannel;
-const rabbitMQurl = 'amqp://localhost'; 
+const rabbitMQurl = 'amqp://user:password@rabbitmq:5672';
 
 function connectToRabbitMQ() {
   amqp.connect(rabbitMQurl, function(error0, connection) {
     if (error0) {
-      throw error0;
+      console.error('Failed to connect to RabbitMQ, retrying in 5 seconds', error0);
+      return setTimeout(connectToRabbitMQ, 5000);
     }
     connection.createChannel(function(error1, channel) {
       if (error1) {
