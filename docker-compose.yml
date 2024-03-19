@@ -15,7 +15,7 @@ services:
       - default
     volumes:
       - ./proxy:/usr/src/app
-      
+
 # RabbitMQ      
   rabbitmq:
     image: rabbitmq:3-management
@@ -39,7 +39,9 @@ services:
     volumes:
       - ./mongodb/data:/data/db
 
-### Services
+###########################################
+### Micro Services ########################
+###########################################
 
 # Target service
   target-service:
@@ -53,6 +55,8 @@ services:
       - default
     volumes:
       - ./target-service:/usr/src/app
+    env_file:
+      - ./target-service/.env
 # Sharpshooter service
   sharpshooter-service:
     build: ./sharpshooter-service
@@ -65,6 +69,8 @@ services:
       - default
     volumes:
       - ./sharpshooter-service:/usr/src/app
+    env_file:
+      - ./sharpshooter-service/.env
 
 # Network
 networks:
