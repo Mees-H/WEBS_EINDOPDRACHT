@@ -22,33 +22,8 @@ app.use(circuitBreaker({
     catchError: catchError 
 }));
 
-// Targets GET, PUT, DELETE
-app.use('/targets/:id', proxy('http://localhost:3001', {
-    proxyReqPathResolver: function(req) {
-        return '/targets/' + req.params.id; 
-    }
-}));
-
-// Targets POST
-app.use('/targets', proxy('http://localhost:3001', {
-    proxyReqPathResolver: function(req) {
-        return '/targets';
-    }
-}));
-
-// Sharpshooters GET, PUT, DELETE
-app.use('/sharpshooters/:id', proxy('http://localhost:3001', {
-    proxyReqPathResolver: function(req) {
-        return '/sharpshooters/' + req.params.id; 
-    }
-}));
-
-// Sharpshooters POST
-app.use('/sharpshooters', proxy('http://localhost:3001', {
-    proxyReqPathResolver: function(req) {
-        return '/sharpshooters';
-    }
-}));
+app.use('/targets/*', proxy('http://localhost:3001'));
+app.use('/sharpshooters/*', proxy('http://localhost:3002'));
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);

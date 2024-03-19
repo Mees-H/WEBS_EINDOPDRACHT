@@ -66,7 +66,7 @@ function sendMessageToQueue(queueName, message) {
 //Routes
 app.use(bodyParser.json());
 
-app.post('/targets', async (req, res) => {
+app.post('/', async (req, res) => {
   try {
     const target = new Target(req.body);
     await target.validate();
@@ -80,7 +80,7 @@ app.post('/targets', async (req, res) => {
   }
 });
 
-app.get('/targets/:id', async (req, res) => {
+app.get('/:id', async (req, res) => {
   try {
     const target = await Target.findById(req.params.id);
     res.status(200).json({target: target, message: 'Successfully retrieved target'});
@@ -89,7 +89,7 @@ app.get('/targets/:id', async (req, res) => {
   }
 });
 
-app.put('/targets/:id', async (req, res) => {
+app.put('/:id', async (req, res) => {
   try {
     const target = new Target(req.body);
     await target.validate();
@@ -103,7 +103,17 @@ app.put('/targets/:id', async (req, res) => {
   }
 });
 
-app.delete('/targets/:id', async (req, res) => {
+app.get('/', async (req, res) => {
+  try {
+    const targets = await Target.find({});
+    res.status(200).json({targets: targets, message: 'Successfully retrieved targets'});
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send(error);
+  }
+});
+
+app.delete('/:id', async (req, res) => {
   try {
     const target = await Target.findByIdAndDelete(req.params.id);
 
@@ -114,8 +124,6 @@ app.delete('/targets/:id', async (req, res) => {
     res.status(500).send(error);
   }
 });
-
-
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
