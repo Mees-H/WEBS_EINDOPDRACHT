@@ -22,8 +22,8 @@ app.use(circuitBreaker({
     catchError: catchError 
 }));
 
-app.use('/targets/*', proxy('http://localhost:3001'));
-app.use('/sharpshooters/*', proxy('http://localhost:3002'));
+app.use('/targets/*', proxy('http://target-service:3001'));
+app.use('/sharpshooters/*', proxy('http://sharpshooter-service:3002'));
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
