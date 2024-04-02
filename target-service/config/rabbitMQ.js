@@ -29,12 +29,26 @@ function sendMessageToQueue(queueName, message) {
     } else {
         throw new Error("RabbitMQ channel doesn't exist");
     }
+}
 
+function consumeMessageFromQueue(queueName, callback) {
+    if (rabbitMQChannel) {
+        rabbitMQChannel.assertQueue(queueName, { durable: false });
+        rabbitMQChannel.consume(queueName, function(msg) {
+            console.log("Received message:", msg.content.toString());
+            callback(msg.content.toString());
+        }, { noAck: true });
+    } else {
+        throw new Error("RabbitMQ channel doesn't exist");
+    }
 }
 
 module.exports = sendMessageToQueue;
 
+module.exports = {
+    sendMessageToQueue,
+    consumeMessageFromQueue
+};
+
 // Call the function to establish the connection
 connectToRabbitMQ();
-
-module.exports = sendMessageToQueue;

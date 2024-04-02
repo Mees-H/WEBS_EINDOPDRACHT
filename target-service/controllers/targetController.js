@@ -1,6 +1,6 @@
 const Target = require('../models/target');
 const queueOptions = require('../config/queueOptions');
-const sendMessageToQueue = require('../config/rabbitMQ');
+const { sendMessageToQueue, consumeMessageFromQueue } = require('../config/rabbitMQ');
 
 async function createTarget(req, res) {
     try {
