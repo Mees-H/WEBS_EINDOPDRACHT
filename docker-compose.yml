@@ -26,6 +26,11 @@ services:
     depends_on:
       - target-service
       - sharpshooter-service
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 100M  
 # RabbitMQ      
   rabbitmq:
     image: rabbitmq:3-management
@@ -39,6 +44,11 @@ services:
       - default
     volumes:
       - ./rabbitmq/data:/var/lib/rabbitmq
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 300M
 # MongoDB
   mongodb:
     image: mongo
@@ -48,7 +58,11 @@ services:
       - default
     volumes:
       - ./mongodb/data:/data/db
-
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 300M
 ###########################################
 ### Micro Services ########################
 ###########################################
@@ -67,6 +81,11 @@ services:
       - ./target-service:/usr/src/app
     env_file:
       - ./envFiles/target-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M 
 # Sharpshooter service
   sharpshooter-service:
     build: ./sharpshooter-service
@@ -81,6 +100,11 @@ services:
       - ./sharpshooter-service:/usr/src/app
     env_file:
       - ./envFiles/sharpshooter-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
 
 # Network
 networks:
