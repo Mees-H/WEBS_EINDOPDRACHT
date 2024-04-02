@@ -1,12 +1,15 @@
 const express = require('express')
+const bodyParser = require('body-parser');
+const shotRoutes = require('./routes/shotRoutes');
 
+// Express
 const app = express()
-const port = 3002;
+const port = process.env.PORT || 3002;
 
-app.use('/create/:targetId', (req, res) => {
-    res.send('Sharpshooters send pictures for specific tagets through this endpoint for targetId ' + req.params.targetId)
-})
+app.use(bodyParser.json());
+
+app.use('/shots', shotRoutes);
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`Sharpshooter service listening at http://localhost:${port}`)
 })
