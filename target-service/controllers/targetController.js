@@ -5,8 +5,6 @@ const imageService = require('../common-modules/imageService');
 
 async function createTarget(req, res) {
     try {
-        console.log('Creating target:', req.body);
-        console.log('Creating target:', req.file);
         const target = new Target(req.body);
         await target.validate();
 

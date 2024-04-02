@@ -21,8 +21,6 @@ function connectToRabbitMQ() {
 }
 
 function sendMessageToQueue(queueName, message) {
-    console.log('Sending message to queue', queueName, message);
-    console.log('rabbitMQChannel', rabbitMQChannel);
     if (rabbitMQChannel) {
         rabbitMQChannel.assertQueue(queueName, { durable: false });
         rabbitMQChannel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));

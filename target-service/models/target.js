@@ -18,12 +18,22 @@ const TargetSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    locationDescription: {
+        type: String,
+        required: true
+    },
+    deadline: {
+        type: Date,
+        required: true
+    },
     status: {
         type: String,
         required: false,
         enum: ['Pending', 'Completed'],
         default: 'Pending'
     }
+}, {
+    timestamps: true
 });
 
 const Target = mongoose.model('targets', TargetSchema);
