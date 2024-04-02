@@ -1,11 +1,21 @@
 const Target = require('../models/target');
 const queueOptions = require('../common-modules/messageQueueNames');
-const { sendMessageToQueue, consumeMessageFromQueue } = require('../common-modules/messageQueueService');
+const { sendMessageToQueue } = require('../common-modules/messageQueueService');
+const imageService = require('../common-modules/imageService');
 
 async function createTarget(req, res) {
     try {
+        console.log('Creating target:', req.body);
+        console.log('Creating target:', req.file);
         const target = new Target(req.body);
         await target.validate();
+
+        // If there's an image in the request, upload it to Imgur
+        if (req.file) {
+            const imageUrl = await imageService.uploadImage(req.file.path, req.file.originalname);
+            target.imageUrl = imageUrl;
+        }
+
         await target.save();
 
         sendMessageToQueue(queueOptions.targetCreate, target.toObject());

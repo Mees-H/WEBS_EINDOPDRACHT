@@ -14,6 +14,10 @@ const TargetSchema = new mongoose.Schema({
         min: -180,
         max: 180
     },
+    imageUrl: {
+        type: String,
+        required: false
+    },
     status: {
         type: String,
         required: false,
