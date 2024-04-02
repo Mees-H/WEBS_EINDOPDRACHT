@@ -2,11 +2,12 @@
 const mongoose = require('../common-modules/mongoDBConnection');
 
 const ShotSchema = new mongoose.Schema({
-    targetId: {
+    // This gets added from the JWT token
+    shooterId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    shooterId: {
+    targetId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },

@@ -14,6 +14,10 @@ async function createTarget(req, res) {
             throw new Error('Image is required');
         }
 
+        console.log(req.user);
+
+        target.ownerId = req.user.userId;
+
         await target.validate();
         await target.save();
 

@@ -105,6 +105,25 @@ services:
         limits:
           cpus: '0.50'
           memory: 200M
+  # User service
+  user-service:
+    build: ./user-service
+    ports:
+      - 3003:3003
+    depends_on:
+      - rabbitmq
+      - mongodb
+    networks:
+      - default
+    volumes:
+      - ./user-service:/usr/src/app
+    env_file:
+      - ./envFiles/user-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
 
 # Network
 networks:

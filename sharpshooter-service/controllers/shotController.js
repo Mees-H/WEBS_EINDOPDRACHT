@@ -13,6 +13,8 @@ async function createShot(req, res) {
         } else {
             throw new Error('Image is required');
         }
+
+        shot.shooterId = req.user.userId;
         
         await shot.validate();
         await shot.save();
