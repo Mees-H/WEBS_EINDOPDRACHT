@@ -6,14 +6,15 @@ const imageService = require('../common-modules/imageService');
 async function createTarget(req, res) {
     try {
         const target = new Target(req.body);
-        await target.validate();
-
         // If there's an image in the request, upload it to Imgur
         if (req.file) {
             const imageUrl = await imageService.uploadImage(req.file.path, req.file.originalname);
             target.imageUrl = imageUrl;
+        } else {
+            throw new Error('Image is required');
         }
 
+        await target.validate();
         await target.save();
 
         sendMessageToQueue(queueOptions.targetCreate, target.toObject());
