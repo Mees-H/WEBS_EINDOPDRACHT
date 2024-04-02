@@ -1,5 +1,5 @@
 
-const mongoose = require('../config/db');
+const mongoose = require('../common-modules/mongoDBConnection');
 
 const TargetSchema = new mongoose.Schema({
     latitude: {
