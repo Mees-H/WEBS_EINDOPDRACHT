@@ -15,12 +15,26 @@ function connectToRabbitMQ() {
                 return setTimeout(connectToRabbitMQ, 5000);
             }
             rabbitMQChannel = channel;
-            console.log('Connected to RabbitMQ');
+            console.log('Connected to RabbitMQ at ', rabbitMQurl);
         });
     });
 }
 
+function sendMessageToQueue(queueName, message) {
+    console.log('Sending message to queue', queueName, message);
+    console.log('rabbitMQChannel', rabbitMQChannel);
+    if (rabbitMQChannel) {
+        rabbitMQChannel.assertQueue(queueName, { durable: false });
+        rabbitMQChannel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
+    } else {
+        throw new Error("RabbitMQ channel doesn't exist");
+    }
+
+}
+
+module.exports = sendMessageToQueue;
+
 // Call the function to establish the connection
 connectToRabbitMQ();
 
-module.exports = rabbitMQChannel;
+module.exports = sendMessageToQueue;

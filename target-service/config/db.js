@@ -4,7 +4,7 @@ const mongoDBurl = process.env.MONGODB_URL || 'mongodb://mongodb:27017/targets';
 function connectWithRetry() {
     return mongoose.connect(mongoDBurl, { useNewUrlParser: true })
         .then(() => {
-            console.log('Connected to MongoDB');
+            console.log('1. Connected to MongoDB at ', mongoDBurl);
         })
         .catch(err => {
             console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
@@ -15,6 +15,6 @@ function connectWithRetry() {
 
 connectWithRetry();
 
-console.log('Connected to MongoDB');
+console.log('2. Connected to MongoDB at ', mongoDBurl);
 
 module.exports = mongoose;
