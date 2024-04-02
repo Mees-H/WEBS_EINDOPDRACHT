@@ -19,7 +19,7 @@ async function createShot(req, res) {
 
         sendMessageToQueue(queueOptions.shotCreate, shot.toObject());
 
-        res.status(201).json({target: shot, message: 'Successfully created shot' });
+        res.status(201).json({shot: shot, message: 'Successfully created shot' });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -28,7 +28,7 @@ async function createShot(req, res) {
 async function getShot(req, res) {
     try {
         const shot = await Shot.findById(req.params.id);
-        res.status(200).json({ target: shot, message: 'Successfully retrieved shot' });
+        res.status(200).json({ shot: shot, message: 'Successfully retrieved shot' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -42,7 +42,7 @@ async function updateShot(req, res) {
 
         sendMessageToQueue(queueOptions.shotUpdate, shot.toObject());
 
-        res.status(200).json({ target: shot, message: 'Successfully updated shot' });
+        res.status(200).json({ shot: shot, message: 'Successfully updated shot' });
     }
     catch (error) {
         res.status(400).json({ error: error.message });
@@ -53,7 +53,7 @@ async function deleteShot(req, res) {
     try {
         const shot = await Shot.findByIdAndDelete(req.params.id);
         sendMessageToQueue(queueOptions.shotDelete, shot.toObject());
-        res.status(200).json({ target: shot, message: 'Successfully deleted shot' });
+        res.status(200).json({ shot: shot, message: 'Successfully deleted shot' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -62,7 +62,7 @@ async function deleteShot(req, res) {
 async function getShots(req, res) {
     try {
         const shots = await Shot.find({});
-        res.status(200).json({targets: shots,  message: 'Successfully retrieved shots' });
+        res.status(200).json({shots: shots,  message: 'Successfully retrieved shots' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

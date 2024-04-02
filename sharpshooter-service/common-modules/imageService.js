@@ -1,5 +1,6 @@
 const { ImgurClient } = require('imgur');
 const fs = require('fs');
+const url = require('url');
 const client = new ImgurClient({ clientId: process.env.IMGUR_CLIENT_ID });
 
 // log if the client ID is not set
@@ -17,16 +18,21 @@ async function uploadImage(imagePath, title = 'Image uploaded from Target Servic
           });
 
         // Wait for an url before deleting the image
-        const imageUrl = response.data.link;
+        var imageUrl = response.data.link;
 
         // delete the image after uploading
-        fs.unlink(imagePath, (err) => {
+        fs.unlinkSync(imagePath, (err) => {
             if (err) {
                 console.error('Failed to delete image', err);
             } else {
                 console.log('Image deleted successfully');
             }
         });
+
+        const parsedUrl = url.parse(imageUrl);
+        if (!parsedUrl.protocol || !parsedUrl.host) {
+            throw new Error('Failed to upload image to Imgur ' + imageUrl);
+        }
 
         return imageUrl;
     } catch (error) {
