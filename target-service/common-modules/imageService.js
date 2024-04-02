@@ -8,7 +8,6 @@ if (!process.env.IMGUR_CLIENT_ID) {
 }
 
 // Function to upload an image to Imgur
-// use dynamic parent folder name as title if title is not provided
 async function uploadImage(imagePath, title = 'Image uploaded from Target Service') {
     try {
         const response = await client.upload({
@@ -16,6 +15,9 @@ async function uploadImage(imagePath, title = 'Image uploaded from Target Servic
             title: title,
             type: 'stream',
           });
+
+        // Wait for an url before deleting the image
+        const imageUrl = response.data.link;
 
         // delete the image after uploading
         fs.unlink(imagePath, (err) => {
@@ -26,7 +28,7 @@ async function uploadImage(imagePath, title = 'Image uploaded from Target Servic
             }
         });
 
-        return response.data.link;
+        return imageUrl;
     } catch (error) {
         console.error('Failed to upload image to Imgur', error);
         throw new Error('Failed to upload image to Imgur ' + error.message);
