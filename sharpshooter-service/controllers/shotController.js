@@ -53,7 +53,12 @@ async function updateShot(req, res) {
 
 async function deleteShot(req, res) {
     try {
-        const shot = await Shot.findByIdAndDelete(req.params.id);
+        const shot = await Shot.findById(req.params.id);
+        // if it is your shot, you can delete it
+        if (shot.shooterId !== req.user.userId) {
+            throw new Error('You can only delete your own shots');
+        }
+        await Shot.findByIdAndDelete(req.params.id);
         sendMessageToQueue(queueOptions.shotDelete, shot.toObject());
         res.status(200).json({ shot: shot, message: 'Successfully deleted shot' });
     } catch (error) {

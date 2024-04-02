@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { sendMessageToQueue } = require('../common-modules/messageQueueService');
+const queueOptions = require('../common-modules/messageQueueNames');
 
 async function register(req, res) {
     try {
@@ -16,6 +18,8 @@ async function register(req, res) {
         });
 
         await user.save();
+
+        sendMessageToQueue(queueOptions.userCreate, user.toObject());
 
         res.status(201).json({ user, message: 'User registered successfully' });
     } catch (error) {
@@ -35,11 +39,10 @@ async function login(req, res) {
             throw new Error('Incorrect password');
         }
 
-        console.log('User logged in successfully');
-        console.log('User ID: ' + user._id);
-        console.log('JWT Secret: ' + process.env.JWT_SECRET);
+        const expiresIn = process.env.JWT_EXPIRE_TIME || '1h';
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: expiresIn });
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JTW_EXPIRE_TIME });
+        sendMessageToQueue(queueOptions.userLogin, user.toObject());
 
         res.status(200).json({ token, message: 'User logged in successfully' });
     } catch (error) {
