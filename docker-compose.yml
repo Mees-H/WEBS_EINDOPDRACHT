@@ -47,8 +47,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.50'
-          memory: 300M
+          cpus: '0.75'
+          memory: 500M
 # MongoDB
   mongodb:
     image: mongo
@@ -119,6 +119,30 @@ services:
       - ./user-service:/usr/src/app
     env_file:
       - ./envFiles/user-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+
+
+###########################################
+### Other Services ########################
+###########################################
+
+# Mail service
+  mail-service:
+    build: ./mail-service
+    ports:
+      - 3004:3004
+    depends_on:
+      - rabbitmq
+    networks:
+      - default
+    volumes:
+      - ./mail-service:/usr/src/app
+    env_file:
+      - ./envFiles/mail-service.env
     deploy:
       resources:
         limits:
