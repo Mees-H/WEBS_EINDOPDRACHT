@@ -55,7 +55,12 @@ async function updateTarget(req, res) {
 
 async function deleteTarget(req, res) {
     try {
-        const target = await Target.findByIdAndDelete(req.params.id);
+        const target = await Target.findById(req.params.id);
+        // if it is your target, you can delete it
+        if (target.ownerId !== req.user.userId) {
+            throw new Error('You can only delete your own targets');
+        }
+        await Target.findByIdAndDelete(req.params.id);
         sendMessageToQueue(queueOptions.targetDelete, target.toObject());
         res.status(200).json({ target, message: 'Successfully deleted target' });
     } catch (error) {

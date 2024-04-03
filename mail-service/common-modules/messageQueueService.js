@@ -34,8 +34,10 @@ function consumeMessageFromQueue(queueName, callback) {
         rabbitMQChannel.assertQueue(queueName, { durable: false });
         rabbitMQChannel.consume(queueName, function(msg) {
             console.log("Received message:", msg.content.toString());
-            callback(msg.content.toString());
-        }, { noAck: true });
+            var isfinished = callback(msg.content.toString());
+            if (isfinished)
+                rabbitMQChannel.ack(msg);
+        }, { noAck: false });
     } else {
         console.log("RabbitMQ channel doesn't exist");
     }

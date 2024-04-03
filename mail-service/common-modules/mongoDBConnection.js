@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const mongoDBurl = process.env.MONGODB_URL || 'mongodb://mongodb:27017/targets';
 
 function connectWithRetry() {
-    return mongoose.connect(mongoDBurl, { useNewUrlParser: true })
+    return mongoose.connect(mongoDBurl)
         .then(() => {
             console.log('1. Connected to MongoDB at ', mongoDBurl);
         })
