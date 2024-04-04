@@ -2,6 +2,7 @@ const { consumeMessageFromQueue } = require('../common-modules/messageQueueServi
 const queueNames = require('../common-modules/messageQueueNames');
 const Target = require('../models/target');
 const Shot = require('../models/shot');
+const { compareImages } = require('../common-modules/scoreService');
 
 // This callback function will process messages received from the queue.
 async function targetInDb(message) {
@@ -20,6 +21,7 @@ async function targetInDb(message) {
 
         // Save the new target to the database
         const savedTarget = await newTarget.save();
+
         console.log('Target saved successfully:', savedTarget);
     } catch (error) {
         console.error('Error processing message:', error);
@@ -35,6 +37,7 @@ async function shotInDb(message) {
             status: shotData.status,
             imageUrl: shotData.imageUrl,
             shooterId: shotData.shooterId,
+            score: shotData.score,
         });
 
         // Save the new shot to the database
@@ -45,10 +48,64 @@ async function shotInDb(message) {
     }
 }
 
+async function calculateScore() {
+    try {
+        // Get all targets from the database
+        const targets = await Target.find();
+        let shots = [];
+
+        for (let target of targets) {
+            // Get all shots from the database where the targetId of the shot matches the id of the target
+            // and the shot does not have a score yet
+            const targetShots = await Shot.find({ targetId: target._id, score: null });
+            shots = shots.concat(targetShots);
+        }
+       
+        console.log("Shots:", shots);
+        // Calculate the scores with the scoreService
+        for (let shot of shots) {
+            const target = targets.find(t => t._id.toString() === shot.targetId.toString());
+            if (!target) {
+                console.log('No target found for shot', shot._id);
+                continue;
+            }
+            const scoreResult = await compareImages(target.imageUrl, shot.imageUrl);
+            const score = scoreResult.result.distance;
+            console.log('Score:', score);
+            // Create a new message with the shotId and the calculated score
+            const message = { shotId: shot._id, score: score };
+            await scoreInDb(JSON.stringify(message));
+            console.log('Score saved successfully:', score);
+        }
+    } catch (error) {
+        console.error('Error processing message:', error);
+    }
+}
+
+async function scoreInDb(message) {
+    try {
+        const scoreData = JSON.parse(message);
+
+        // Find the shot in the database using the shotId from the message
+        const shot = await Shot.findById(scoreData.shotId);
+
+        // Update the score of the shot
+        shot.score = scoreData.score;
+
+        // Save the updated shot to the database
+        const updatedShot = await shot.save();
+
+        console.log('Score updated successfully:', updatedShot);
+    } catch (error) {
+        console.error('Error processing message:', error);
+    }
+}
+
 function start() {
     setInterval(() => {
         consumeMessageFromQueue('targetCreateScore', targetInDb);
         consumeMessageFromQueue('shotCreateScore', shotInDb);
+        calculateScore();
         console.log('Consuming messages from the queue:', queueNames.targetCreateScore, queueNames.shotCreateScore);
     }, 10000);
 }

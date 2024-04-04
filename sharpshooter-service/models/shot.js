@@ -20,6 +20,11 @@ const ShotSchema = new mongoose.Schema({
         required: false,
         enum: ['Pending', 'Completed'],
         default: 'Pending'
+    },
+    score: {
+        type: Number,
+        required: false,
+        default: null
     }
 }, {
     timestamps: true
