@@ -96,8 +96,6 @@ async function scoreInDb(message) {
         // Save the updated shot to the database
         const updatedShot = await shot.save();
 
-        sendMessageToQueue(queueNames.targetScoreUpdate, updatedShot.toObject());
-
         console.log('Score updated successfully:', updatedShot);
     } catch (error) {
         console.error('Error processing message:', error);

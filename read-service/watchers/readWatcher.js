@@ -125,7 +125,7 @@ function start() {
         consumeMessageFromQueue('shotCreate', shotInDb);
         consumeMessageFromQueue('shotUpdate', shotUpDb);
         consumeMessageFromQueue('shotDelete', shotDelDb);
-        console.log('Consuming messages from the queue:', queueNames.targetCreate, queueNames.targetUpdate, queueNames.targetDelete, queueNames.shotCreate, queueNames.shotUpdate, queueNames.shotDelete, queueNames.targetScoreUpdate);
+        console.log('Consuming messages from the queue:', queueNames.targetCreate, queueNames.targetUpdate, queueNames.targetDelete, queueNames.shotCreate, queueNames.shotUpdate, queueNames.shotDelete);
     }, 10000);
 }
 
