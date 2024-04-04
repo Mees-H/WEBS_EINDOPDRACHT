@@ -1,4 +1,5 @@
 const { consumeMessageFromQueue } = require('../common-modules/messageQueueService');
+const { sendMessageToQueue } = require('../common-modules/messageQueueService');
 const queueNames = require('../common-modules/messageQueueNames');
 const Target = require('../models/target');
 const Shot = require('../models/shot');
@@ -94,6 +95,8 @@ async function scoreInDb(message) {
 
         // Save the updated shot to the database
         const updatedShot = await shot.save();
+
+        sendMessageToQueue(queueNames.targetScoreUpdate, updatedShot.toObject());
 
         console.log('Score updated successfully:', updatedShot);
     } catch (error) {

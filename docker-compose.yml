@@ -168,6 +168,25 @@ services:
           cpus: '0.50'
           memory: 200M
 
+# Read service
+  read-service:
+    build: ./read-service
+    ports:
+      - 3006:3006
+    depends_on:
+      - rabbitmq
+    networks:
+      - default
+    volumes:
+      - ./read-service:/usr/src/app
+    env_file:
+      - ./envFiles/read-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+
 # Network
 networks:
   default:
