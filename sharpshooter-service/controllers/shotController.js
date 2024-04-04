@@ -5,7 +5,7 @@ const imageService = require('../common-modules/imageService');
 
 async function createShot(req, res) {
     try {
-        const shot = new Shot(req.body);
+        const shot = new Shot(req.body);  
         // If there's an image in the request, upload it to Imgur
         if (req.file) {
             const imageUrl = await imageService.uploadImage(req.file.path, req.file.originalname);
@@ -20,6 +20,7 @@ async function createShot(req, res) {
         await shot.save();
 
         sendMessageToQueue(queueOptions.shotCreate, shot.toObject());
+        sendMessageToQueue(queueOptions.shotCreateScore, shot.toObject());
 
         res.status(201).json({shot: shot, message: 'Successfully created shot' });
     } catch (error) {

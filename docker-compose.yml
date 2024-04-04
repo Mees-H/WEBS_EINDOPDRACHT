@@ -149,6 +149,25 @@ services:
           cpus: '0.50'
           memory: 200M
 
+# Score service
+  score-service:
+    build: ./score-service
+    ports:
+      - 3005:3005
+    depends_on:
+      - rabbitmq
+    networks:
+      - default
+    volumes:
+      - ./score-service:/usr/src/app
+    env_file:
+      - ./envFiles/score-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+
 # Network
 networks:
   default:

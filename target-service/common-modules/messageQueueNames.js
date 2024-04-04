@@ -1,7 +1,10 @@
 // object with queue names and their settings
 
 module.exports = {
+    // CRUD
     targetCreate: 'targetCreate',
     targetUpdate: 'targetUpdate',
-    targetDelete: 'targetDelete'
+    targetDelete: 'targetDelete',
+    // Score
+    targetCreateScore: 'targetCreateScore',
 };

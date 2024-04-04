@@ -41,8 +41,6 @@ function consumeMessageFromQueue(queueName, callback) {
     }
 }
 
-module.exports = sendMessageToQueue;
-
 module.exports = {
     sendMessageToQueue,
     consumeMessageFromQueue
