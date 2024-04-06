@@ -70,8 +70,11 @@ async function calculateScore() {
                 console.log('No target found for shot', shot._id);
                 continue;
             }
-            const scoreResult = await compareImages(target.imageUrl, shot.imageUrl);
-            const score = scoreResult.result.distance;
+            // TURN THIS BACK ON LATERR
+            // const scoreResult = await compareImages(target.imageUrl, shot.imageUrl);
+            // const score = scoreResult.result.distance;
+
+            const score = Math.floor(Math.random() * 100) + 1;
             console.log('Score:', score);
             // Create a new message with the shotId and the calculated score
             const message = { shotId: shot._id, score: score };
