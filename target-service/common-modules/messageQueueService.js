@@ -37,7 +37,7 @@ function consumeMessageFromQueue(queueName, callback) {
             callback(msg.content.toString());
         }, { noAck: true });
     } else {
-        throw new Error("RabbitMQ channel doesn't exist");
+        console.error("RabbitMQ channel doesn't exist");
     }
 }
 

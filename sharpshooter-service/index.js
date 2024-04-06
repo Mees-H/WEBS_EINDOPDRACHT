@@ -1,6 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const shotRoutes = require('./routes/shotRoutes');
+const sharpshooterWatcher = require('./watchers/sharpshooterWatcher');
+
+// Watcher
+sharpshooterWatcher.start();
 
 // Express
 const app = express()

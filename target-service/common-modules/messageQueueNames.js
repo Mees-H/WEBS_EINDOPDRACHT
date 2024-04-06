@@ -9,4 +9,6 @@ module.exports = {
     targetCreateScore: 'targetCreateScore',
     // Watcher
     shotDeleteCheck: 'shotDeleteCheck',
+    shotDeleteProceed: 'shotDeleteProceed',
+    shotDeleteCancel: 'shotDeleteCancel',
 };

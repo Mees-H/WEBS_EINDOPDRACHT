@@ -59,7 +59,8 @@ async function deleteShot(req, res) {
         }
 
         else {
-            shot.status = 'Pending_delete';
+            shot.status = 'Pending_deletion';
+            await shot.save();
             sendMessageToQueue(queueOptions.shotDeleteCheck, { shot: shot.toObject(), userId: req.user.userId });
             res.status(202).json({ shot: shot, message: 'Shot is pending deletion' });
         }
