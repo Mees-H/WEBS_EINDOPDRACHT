@@ -7,6 +7,8 @@ module.exports = {
     targetDelete: 'targetDelete',
     // Score
     targetCreateScore: 'targetCreateScore',
+    // Clock
+    targetCreateClock: 'targetCreateClock',
     // Watcher
     shotDeleteCheck: 'shotDeleteCheck',
     shotDeleteProceed: 'shotDeleteProceed',

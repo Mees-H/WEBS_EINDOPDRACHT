@@ -18,7 +18,7 @@ const ShotSchema = new mongoose.Schema({
     status: {
         type: String,
         required: false,
-        enum: ['Pending', 'Completed', 'Pending_deletion'],
+        enum: ['Pending', 'Completed', 'Pending_deletion', 'Expired'],
         default: 'Pending'
     },
     score: {

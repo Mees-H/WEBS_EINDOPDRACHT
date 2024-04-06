@@ -104,7 +104,23 @@ async function scoreInDb(message) {
 
         console.log('Score updated successfully:', updatedShot);
 
-        await sendMessageToQueue(queueNames.shotScoreUpdate, updatedShot.toObject());
+        sendMessageToQueue(queueNames.shotScoreUpdate, updatedShot.toObject());
+    } catch (error) {
+        console.error('Error processing message:', error);
+    }
+}
+
+async function getScoresMail(message) {
+    try {
+        const target = JSON.parse(message);
+
+        console.log('Target:', target);
+        // Find all shots for the target in the database
+        const shots = await Shot.find({ targetId: target._id });
+
+        sendMessageToQueue(queueNames.getMailForScores, shots);
+        
+        console.log('Scores mail sent successfully:', shots);
     } catch (error) {
         console.error('Error processing message:', error);
     }
@@ -114,6 +130,7 @@ function start() {
     setInterval(() => {
         consumeMessageFromQueue('targetCreateScore', targetInDb);
         consumeMessageFromQueue('shotCreateScore', shotInDb);
+        consumeMessageFromQueue('getScoresMail', getScoresMail);
         calculateScore();
         console.log('Consuming messages from the queue:', queueNames.targetCreateScore, queueNames.shotCreateScore);
     }, 10000);

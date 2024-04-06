@@ -15,10 +15,26 @@ async function checkShotForDeletion(message) {
     }
 }
 
+async function setExpiredTarget(message) {
+    const target = JSON.parse(message);
+    const expiredTarget = await Target.findById(target._id);
+    if (!expiredTarget) {
+        console.log('Target not found:', target._id);
+        return;
+    }
+    if (expiredTarget.status === 'Expired') {
+        console.log('Target already expired:', target._id);
+        return;
+    }
+    expiredTarget.status = 'Expired';
+    await expiredTarget.save();
+}
+
 
 function start() {
     setInterval(() => {
         consumeMessageFromQueue('shotDeleteCheck', checkShotForDeletion);
+        consumeMessageFromQueue('targetExpired', setExpiredTarget);
         console.log('Consuming messages from the queue:', queueNames.shotDeleteCheck);
     }, 10000);
 }

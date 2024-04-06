@@ -5,4 +5,7 @@ module.exports = {
     shotCreateScore: 'shotCreateScore',
     targetScoreUpdate: 'targetScoreUpdate',
     shotScoreUpdate: 'shotScoreUpdate',
+    getScoresMail: 'getScoresMail',
+    sendScoresMail: 'sendScoresMail',
+    getMailForScores: 'getMailForScores',
 };

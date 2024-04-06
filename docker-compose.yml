@@ -191,6 +191,26 @@ services:
         limits:
           cpus: '0.50'
           memory: 200M
+        
+# Clock service
+  clock-service:
+    build: ./clock-service
+    ports:
+      - 3007:3007
+    depends_on:
+      - rabbitmq
+    networks:
+      - default
+    volumes:
+      - ./clock-service:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./envFiles/clock-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
 
 # Network
 networks:

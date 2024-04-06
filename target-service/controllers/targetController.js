@@ -31,6 +31,7 @@ async function createTarget(req, res) {
         // send message to both mailservice (targetCreate) and score service (targetCreateScore)
         sendMessageToQueue(queueOptions.targetCreate, target.toObject());
         sendMessageToQueue(queueOptions.targetCreateScore, target.toObject());
+        sendMessageToQueue(queueOptions.targetCreateClock, target.toObject());
 
         res.status(201).json({ target, message: 'Successfully created target' });
     } catch (error) {

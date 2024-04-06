@@ -1,6 +1,9 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
+const userWatcher = require('./watchers/userWatcher');
+
+userWatcher.start();
 
 // Express
 const app = express()

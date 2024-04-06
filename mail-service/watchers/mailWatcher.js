@@ -22,9 +22,28 @@ function sendUserCreatedEmail(message) {
     }
 }
 
+function sendScoresMail(message) {
+    // send an email to each email in the list with their score
+    const messageContent = JSON.parse(message);
+    for (let email of messageContent.emails) {
+        var mailOptions = {
+            from: process.env.SENDER_EMAIL,
+            to: email,
+            subject: "Je hebt een score!",
+            text: `Hallo, je hebt een score van ${messageContent.shots[0].score} behaald!`
+        };
+
+        console.log('mailOptions.to:', mailOptions.to);
+
+        sendEmail(mailOptions);
+    }
+}
+
+
 function start() {
     setInterval(() => {
         consumeMessageFromQueue('userCreate', sendUserCreatedEmail);
+        consumeMessageFromQueue('sendScoresMail', sendScoresMail);
         console.log('Consuming messages from the queue:', queueNames.userCreate);
     }, 10000);
 }
