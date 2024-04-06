@@ -11,6 +11,7 @@ async function targetInDb(message) {
         const targetData = JSON.parse(message);
 
         const newTarget = new Target({
+            _id: targetData._id,
             latitude: targetData.latitude,
             longitude: targetData.longitude,
             locationDescription: targetData.locationDescription,
@@ -34,6 +35,7 @@ async function shotInDb(message) {
         const shotData = JSON.parse(message);
 
         const newShot = new Shot({
+            _id: shotData._id,
             targetId: shotData.targetId,
             status: shotData.status,
             imageUrl: shotData.imageUrl,
