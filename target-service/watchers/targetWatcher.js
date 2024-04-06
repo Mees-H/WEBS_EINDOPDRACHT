@@ -7,7 +7,7 @@ async function checkShotForDeletion(message) {
     const { shot, userId } = JSON.parse(message);
     // check if the shottargetid matched the target id and the owner id the the id of the token
     const target = await Target.findById(shot.targetId);
-    if (!target || target.ownerId != userId) {
+    if (!target || target.ownerId !== userId) {
         sendMessageToQueue(queueNames.shotDeleteCancel, shot);
     }
     else {
