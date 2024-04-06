@@ -46,13 +46,24 @@ async function updateShot(req, res) {
 async function deleteShot(req, res) {
     try {
         const shot = await Shot.findById(req.params.id);
-        // if it is your shot, you can delete it
-        if (shot.shooterId !== req.user.userId) {
-            throw new Error('You can only delete your own shots');
+
+        if (!shot) {
+            res.status(404).json({ message: 'Shot not found' });
+            return;
         }
-        await Shot.findByIdAndDelete(req.params.id);
-        sendMessageToQueue(queueOptions.shotDelete, shot.toObject());
-        res.status(200).json({ shot: shot, message: 'Successfully deleted shot' });
+        
+        if (shot.shooterId == req.user.userId) {
+            await Shot.findByIdAndDelete(req.params.id);
+            sendMessageToQueue(queueOptions.shotDelete, shot.toObject());
+            res.status(200).json({ shot: shot, message: 'Successfully deleted shot' });
+        }
+
+        else {
+            shot.status = 'Pending_delete';
+            sendMessageToQueue(queueOptions.shotDeleteCheck, { shot: shot.toObject(), userId: req.user.userId });
+            res.status(202).json({ shot: shot, message: 'Shot is pending deletion' });
+        }
+        
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -5,6 +5,7 @@ module.exports = {
     shotCreate: 'shotCreate',
     shotUpdate: 'shotUpdate',
     shotDelete: 'shotDelete',
+    shotDeleteCheck: 'shotDeleteCheck',
     // Score
     shotCreateScore: 'shotCreateScore',
 };
