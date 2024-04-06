@@ -17,6 +17,17 @@ const TargetSchema = new mongoose.Schema({
         min: -180,
         max: 180
     },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'], // 'location.type' must be 'Point'
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     imageUrl: {
         type: String,
         required: true
@@ -38,6 +49,8 @@ const TargetSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+TargetSchema.index({ location: '2dsphere' });
 
 const Target = mongoose.model('targets', TargetSchema);
 

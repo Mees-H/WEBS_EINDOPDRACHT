@@ -1,20 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../common-modules/authenticateToken');
-const { getTarget, getTargets } = require('../controllers/targetController');
+const { getTarget, getTargets, getShotsForTarget, getTargetsByLocation, getMyScoreForTarget } = require('../controllers/targetController');
+
+
+// List all targets based on longitude and latitude and radius
+router.get('/search', authenticateToken, getTargetsByLocation);
 
 router.get('/:id', authenticateToken, getTarget);
 
 // List all targets
 router.get('/', authenticateToken, getTargets);
 
-// // Get scores for all participants on a specific target
-// router.get('/:id/scores', authenticateToken, getScoresForTarget);
+// List all shots for a target
+router.get('/:id/shots', authenticateToken, getShotsForTarget);
 
-// // Get targets based on location name or coordinates
-// router.get('/search', authenticateToken, getTargetsByLocation);
+// Get the score for a target
+router.get('/:id/my-score', authenticateToken, getMyScoreForTarget);
 
-// // Get a specific participant's score on a specific target
-// router.get('/:id/scores/:participantId', authenticateToken, getParticipantScoreForTarget);
 
 module.exports = router;

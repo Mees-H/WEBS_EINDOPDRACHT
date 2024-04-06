@@ -14,6 +14,7 @@ async function targetInDb(message) {
             _id: targetData._id,
             latitude: targetData.latitude,
             longitude: targetData.longitude,
+            location: targetData.location,
             locationDescription: targetData.locationDescription,
             deadline: new Date(targetData.deadline),
             status: targetData.status,

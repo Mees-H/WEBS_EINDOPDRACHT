@@ -5,7 +5,14 @@ const imageService = require('../common-modules/imageService');
 
 async function createTarget(req, res) {
     try {
-        const target = new Target(req.body);
+        const targetData = req.body;
+        const target = new Target({
+            ...targetData,
+            location: {
+                type: 'Point',
+                coordinates: [targetData.longitude, targetData.latitude]
+            }
+        });
         // If there's an image in the request, upload it to Imgur
         if (req.file) {
             const imageUrl = await imageService.uploadImage(req.file.path, req.file.originalname);
@@ -35,6 +42,10 @@ async function updateTarget(req, res) {
     try {
         const target = new Target(req.body);
         await target.validate();
+        req.body.location = {
+            type: 'Point',
+            coordinates: [req.body.longitude, req.body.latitude]
+        };
         await Target.findByIdAndUpdate(req.params.id, req.body);
 
         sendMessageToQueue(queueOptions.targetUpdate, target.toObject());
