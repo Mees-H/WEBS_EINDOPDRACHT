@@ -11,15 +11,14 @@ async function getMailForScores(message) {
     // Check if shotData exists and is an array
     if (shotData && Array.isArray(shotData)) {
         for (let shot of shotData) {
-            User.findById(shot.shooterId, (err, user) => {
-                if (err) {
-                    console.error('Error finding user:', err);
-                } else {
-                    //get the email of the user and add it to the list of emails
-                    console.log('User found:', user);
-                    emails.push(user.email);
-                }
-            });
+            try {
+                const user = await User.findById(shot.shooterId);
+                //get the email of the user and add it to the list of emails
+                console.log('User found:', user);
+                emails.push(user.email);
+            } catch (err) {
+                console.error('Error finding user:', err);
+            }
         }
     } else {
         console.error('shotData is not iterable');
