@@ -52,7 +52,7 @@ async function getTargetsByLocation(req, res) {
 
 async function getMyScoreForTarget(req, res) {
     try {
-        const shot = await Shot.findOne({ targetId: req.params.id, userId: req.user.userId });
+        const shot = await Shot.findOne({ targetId: req.params.id, shooterId: req.user.userId });
 
         if (!shot) {
             res.status(404).json({ message: 'You have not shot at this target yet' });
