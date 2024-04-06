@@ -3,7 +3,7 @@ const { sendEmail } = require('../controllers/mailController');
 const queueNames = require('../common-modules/messageQueueNames');
 
 // This callback function will process messages received from the queue.
-function sendUserCreatedEmail(message) {
+async function sendUserCreatedEmail(message) {
     try {
         const messageContent = JSON.parse(message);
         console.log('Processing message for email sending:', messageContent);
@@ -22,23 +22,68 @@ function sendUserCreatedEmail(message) {
     }
 }
 
-function sendScoresMail(message) {
+async function sendScoresMail(message) {
     // send an email to each email in the list with their score
     const messageContent = JSON.parse(message);
-    for (let email of messageContent.emails) {
-        var mailOptions = {
+    if (messageContent.emails && messageContent.emails.length > 0) {
+        let highestScoreShot = getHighestScoreShot(messageContent.shots);
+        for (let email of messageContent.emails) {
+            let score = messageContent.shots[0].score;
+            let subject = "Je hebt een score!";
+            let text = `Hallo, je hebt een score van ${score} behaald!`;
+            if (highestScoreShot.shooterId === messageContent.shots[0].shooterId) {
+                subject = "Gefeliciteerd! Je hebt de hoogste score!";
+                text = `Hallo, je hebt de hoogste score van ${score} behaald!`;
+            }
+            const mailOptions = {
+                from: process.env.SENDER_EMAIL,
+                to: email,
+                subject: subject,
+                html: `<p>${text}</p></br><p>Target foto:</p><img src="${messageContent.target.imageUrl}" alt="target image" style="width: 200px; height: 200px;"/> </br> <p>Sharpshooter foto:</p><img src="${messageContent.shots[0].imageUrl}" alt="shot image" style="width: 200px; height: 200px;"/>`
+            };
+
+            console.log('mailOptions.to:', mailOptions.to);
+
+            sendEmail(mailOptions);
+        }
+    }
+
+    let htmlContent = ['Hallo, je target is beoordeeld! Bekijk de scores van de sharpshooters:'];
+
+    for (let shots of messageContent.shots) {
+        htmlContent.push(`<p>Sharpshooter score: ${shots.score}</p></br><p>Sharpshooter foto:</p><img src="${shots.imageUrl}" alt="shot image" style="width: 200px; height: 200px;"/></br>`);
+    }
+    console.log("Owner Email:", messageContent.ownerEmail);
+    console.log("Shots:", messageContent.shots);   
+    if (messageContent.ownerEmail) {
+        const mailOptionsTarget = {
             from: process.env.SENDER_EMAIL,
-            to: email,
-            subject: "Je hebt een score!",
-            text: `Hallo, je hebt een score van ${messageContent.shots[0].score} behaald!`
+            to: messageContent.ownerEmail,
+            subject: "Je target is beoordeeld!",
+            html: htmlContent.join(''),
         };
-
-        console.log('mailOptions.to:', mailOptions.to);
-
-        sendEmail(mailOptions);
+        console.log('mailOptions.to:', mailOptionsTarget.to);
+        sendEmail(mailOptionsTarget);
     }
 }
 
+// get the highest score of the shots
+function getHighestScoreShot(shots) {
+    let highestScoreShot = null;
+    let highestScore = 0;
+    for (let shot of shots) {
+        // the lower the score the better, make a formula for that
+        if (shot.score === 0) {
+            continue;
+        }
+        let computedScore = 100 - shot.score;
+        if (computedScore > highestScore) {
+            highestScore = computedScore;
+            highestScoreShot = shot;
+        }
+    }
+    return highestScoreShot;
+}
 
 function start() {
     setInterval(() => {
