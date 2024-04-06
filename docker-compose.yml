@@ -1,0 +1,218 @@
+# docker-compose.yml
+version: '3'
+services:
+# Main app
+  # main-app:
+  #   build: ./proxy
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - rabbitmq
+  #     - mongodb
+  #     - target-service
+  #     - sharpshooter-service
+  #   networks:
+  #     - default
+  #   volumes:
+  #     - ./proxy:/usr/src/app
+
+# Nginx
+  nginx:
+    image: nginx:latest
+    ports:
+      - 3000:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - target-service
+      - sharpshooter-service
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 100M  
+# RabbitMQ      
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - 5672:5672
+      - 15672:15672  
+    networks:
+      - default
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 500M
+# MongoDB
+  mongodb:
+    image: mongo
+    ports:
+      - 27018:27017
+    networks:
+      - default
+    volumes:
+      - ./mongodb/data:/data/db
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 300M
+###########################################
+### Micro Services ########################
+###########################################
+
+# Target service
+  target-service:
+    build: ./target-service
+    ports:
+      - 3001:3001
+    depends_on:
+      - rabbitmq
+      - mongodb
+    networks:
+      - default
+    volumes:
+      - ./target-service:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./envFiles/target-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M 
+# Sharpshooter service
+  sharpshooter-service:
+    build: ./sharpshooter-service
+    ports:
+      - 3002:3002
+    depends_on:
+      - rabbitmq
+      - mongodb
+    networks:
+      - default
+    volumes:
+      - ./sharpshooter-service:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./envFiles/sharpshooter-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+  # User service
+  user-service:
+    build: ./user-service
+    ports:
+      - 3003:3003
+    depends_on:
+      - rabbitmq
+      - mongodb
+    networks:
+      - default
+    volumes:
+      - ./user-service:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./envFiles/user-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+
+
+###########################################
+### Other Services ########################
+###########################################
+
+# Mail service
+  mail-service:
+    build: ./mail-service
+    ports:
+      - 3004:3004
+    depends_on:
+      - rabbitmq
+    networks:
+      - default
+    volumes:
+      - ./mail-service:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./envFiles/mail-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+
+# Score service
+  score-service:
+    build: ./score-service
+    ports:
+      - 3005:3005
+    depends_on:
+      - rabbitmq
+    networks:
+      - default
+    volumes:
+      - ./score-service:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./envFiles/score-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+
+# Read service
+  read-service:
+    build: ./read-service
+    ports:
+      - 3006:3006
+    depends_on:
+      - rabbitmq
+    networks:
+      - default
+    volumes:
+      - ./read-service:/usr/src/app
+    env_file:
+      - ./envFiles/read-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+        
+# Clock service
+  clock-service:
+    build: ./clock-service
+    ports:
+      - 3007:3007
+    depends_on:
+      - rabbitmq
+    networks:
+      - default
+    volumes:
+      - ./clock-service:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./envFiles/clock-service.env
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 200M
+
+# Network
+networks:
+  default:
+    driver: bridge

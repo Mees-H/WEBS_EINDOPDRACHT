@@ -1,0 +1,24 @@
+{
+    "name": "score-service",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon index.js",
+        "lint": "eslint ."
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "amqplib": "^0.10.3",
+        "axios": "^1.6.8",
+        "got": "^14.2.1",
+        "mongoose": "^8.3.0",
+        "nodemailer": "^6.7.2"
+    },
+    "devDependencies": {
+        "eslint": "^8.57.0",
+        "eslint-plugin-import": "^2.29.1"
+    }
+}
