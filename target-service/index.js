@@ -1,6 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const targetRoutes = require('./routes/targetRoutes');
+const targetWatcher = require('./watchers/targetWatcher');
+
+// Watcher
+targetWatcher.start();
 
 // Express
 const app = express()
