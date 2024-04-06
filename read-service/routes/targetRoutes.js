@@ -18,5 +18,4 @@ router.get('/:id/shots', authenticateToken, getShotsForTarget);
 // Get the score for a target
 router.get('/:id/my-score', authenticateToken, getMyScoreForTarget);
 
-
 module.exports = router;
