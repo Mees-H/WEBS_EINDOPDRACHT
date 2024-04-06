@@ -4,4 +4,5 @@ module.exports = {
     targetCreateScore: 'targetCreateScore',
     shotCreateScore: 'shotCreateScore',
     targetScoreUpdate: 'targetScoreUpdate',
+    shotScoreUpdate: 'shotScoreUpdate',
 };

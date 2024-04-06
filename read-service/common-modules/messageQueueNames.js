@@ -8,4 +8,5 @@ module.exports = {
     shotUpdate: 'shotUpdate',
     shotDelete: 'shotDelete',
     targetScoreUpdate: 'targetScoreUpdate',
+    shotScoreUpdate: 'shotScoreUpdate',
 };

@@ -119,6 +119,27 @@ async function shotDelDb(message) {
     }
 }
 
+async function shotScoreUpDb(message) {
+    try {
+        const shotData = JSON.parse(message);
+
+        // Check if the shot exists in the database
+        const shot = await Shot.findById(shotData._id);
+
+        if (shot) {
+            // If the shot exists, update its score
+            shot.score = shotData.score;
+            const result = await shot.save();
+            console.log('Shot score updated successfully:', result);
+        } else {
+            console.log('No shot found with id:', shotData._id);
+        }
+    } catch (error) {
+        console.error('Error processing message:', error);
+    }
+}
+
+
 function start() {
     setInterval(() => {
         consumeMessageFromQueue('targetCreate', targetInDb);
@@ -127,7 +148,8 @@ function start() {
         consumeMessageFromQueue('shotCreate', shotInDb);
         consumeMessageFromQueue('shotUpdate', shotUpDb);
         consumeMessageFromQueue('shotDelete', shotDelDb);
-        console.log('Consuming messages from the queue:', queueNames.targetCreate, queueNames.targetUpdate, queueNames.targetDelete, queueNames.shotCreate, queueNames.shotUpdate, queueNames.shotDelete);
+        consumeMessageFromQueue('shotScoreUpdate', shotScoreUpDb);
+        console.log('Consuming messages from the queue:', queueNames.targetCreate, queueNames.targetUpdate, queueNames.targetDelete, queueNames.shotCreate, queueNames.shotUpdate, queueNames.shotDelete, queueNames.shotScoreUpdate);
     }, 10000);
 }
 
