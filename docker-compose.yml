@@ -79,6 +79,7 @@ services:
       - default
     volumes:
       - ./target-service:/usr/src/app
+      - /usr/src/app/node_modules
     env_file:
       - ./envFiles/target-service.env
     deploy:
@@ -98,6 +99,7 @@ services:
       - default
     volumes:
       - ./sharpshooter-service:/usr/src/app
+      - /usr/src/app/node_modules
     env_file:
       - ./envFiles/sharpshooter-service.env
     deploy:
@@ -117,6 +119,7 @@ services:
       - default
     volumes:
       - ./user-service:/usr/src/app
+      - /usr/src/app/node_modules
     env_file:
       - ./envFiles/user-service.env
     deploy:
@@ -141,6 +144,7 @@ services:
       - default
     volumes:
       - ./mail-service:/usr/src/app
+      - /usr/src/app/node_modules
     env_file:
       - ./envFiles/mail-service.env
     deploy:
@@ -160,6 +164,7 @@ services:
       - default
     volumes:
       - ./score-service:/usr/src/app
+      - /usr/src/app/node_modules
     env_file:
       - ./envFiles/score-service.env
     deploy:
@@ -179,6 +184,7 @@ services:
       - default
     volumes:
       - ./read-service:/usr/src/app
+      - /usr/src/app/node_modules
     env_file:
       - ./envFiles/read-service.env
     deploy:
