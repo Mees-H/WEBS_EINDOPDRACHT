@@ -2,9 +2,10 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    paths:
+      - 'target-service/**'
   pull_request:
-    branches: [ main, dev ]
+    branches: [ main ]
 
 jobs:
   build:
