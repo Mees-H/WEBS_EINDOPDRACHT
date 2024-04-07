@@ -21,8 +21,6 @@ async function createTarget(req, res) {
             throw new Error('Image is required');
         }
 
-        console.log(req.user);
-
         target.ownerId = req.user.userId;
 
         await target.validate();
@@ -41,15 +39,27 @@ async function createTarget(req, res) {
 
 async function updateTarget(req, res) {
     try {
-        const target = new Target(req.body);
-        await target.validate();
+        const target = await Target.findById(req.params.id);
+        if (!target) {
+            return res.status(404).json({ error: 'Target not found' });
+        }
+
+        console.log('target:', target);
+        console.log('req.user.userId:', req.user.userId);
+
+        if (target.ownerId !== req.user.userId) {
+            return res.status(403).json({ error: 'You are not the owner of this target' });
+        }
+
+        const updatedTarget = new Target(req.body);
+        await updatedTarget.validate();
         req.body.location = {
             type: 'Point',
             coordinates: [req.body.longitude, req.body.latitude]
         };
         await Target.findByIdAndUpdate(req.params.id, req.body);
 
-        sendMessageToQueue(queueOptions.targetUpdate, target.toObject());
+        sendMessageToQueue(queueOptions.targetUpdate, updatedTarget.toObject());
 
         res.status(200).json({ target, message: 'Successfully updated target' });
     }
@@ -61,10 +71,14 @@ async function updateTarget(req, res) {
 async function deleteTarget(req, res) {
     try {
         const target = await Target.findById(req.params.id);
-        // if it is your target, you can delete it
-        if (target.ownerId !== req.user.userId) {
-            throw new Error('You can only delete your own targets');
+        if (!target) {
+            return res.status(404).json({ error: 'Target not found' });
         }
+
+        if (target.ownerId !== req.user.userId) {
+            return res.status(403).json({ error: 'You are not the owner of this target' });
+        }
+
         await Target.findByIdAndDelete(req.params.id);
         sendMessageToQueue(queueOptions.targetDelete, target.toObject());
         res.status(200).json({ target, message: 'Successfully deleted target' });

@@ -14,13 +14,15 @@
     "amqplib": "^0.10.3",
     "body-parser": "^1.20.2",
     "express": "^4.18.3",
+    "express-prom-bundle": "^7.0.0",
     "fs": "^0.0.1-security",
     "http-proxy": "^1.18.1",
     "imgur": "^2.4.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.5.0",
     "mongoose": "^8.2.2",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "prom-client": "^15.1.1"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
@@ -32,10 +34,10 @@
     "collectCoverage": true,
     "coverageThreshold": {
       "global": {
-        "branches": 60,
-        "functions": 60,
-        "lines": 60,
-        "statements": 60
+        "branches": 75,
+        "functions": 75,
+        "lines": 75,
+        "statements": 75
       }
     }
   }

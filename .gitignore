@@ -2,3 +2,6 @@
 mongodb/*
 rabbitmq/*
 */.env
+*/coverage/*
+*/prometheus-data
+*/grafana-data

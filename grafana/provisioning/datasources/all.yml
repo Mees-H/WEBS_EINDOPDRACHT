@@ -1,0 +1,6 @@
+datasources:
+- name: DS_PROMETHEUS
+  type: prometheus
+  access: proxy
+  url: http://docker.host.internal:9090
+  isDefault: true
