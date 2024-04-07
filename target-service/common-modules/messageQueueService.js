@@ -21,6 +21,9 @@ function connectToRabbitMQ() {
 }
 
 function sendMessageToQueue(queueName, message) {
+    if (!rabbitMQChannel) {
+        connectToRabbitMQ();
+    }
     if (rabbitMQChannel) {
         rabbitMQChannel.assertQueue(queueName, { durable: false });
         rabbitMQChannel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
@@ -30,6 +33,9 @@ function sendMessageToQueue(queueName, message) {
 }
 
 function consumeMessageFromQueue(queueName, callback) {
+    if (!rabbitMQChannel) {
+        connectToRabbitMQ();
+    }
     if (rabbitMQChannel) {
         rabbitMQChannel.assertQueue(queueName, { durable: false });
         rabbitMQChannel.consume(queueName, function(msg) {
@@ -43,8 +49,5 @@ function consumeMessageFromQueue(queueName, callback) {
 
 module.exports = {
     sendMessageToQueue,
-    consumeMessageFromQueue
+    consumeMessageFromQueue,
 };
-
-// Call the function to establish the connection
-connectToRabbitMQ();
