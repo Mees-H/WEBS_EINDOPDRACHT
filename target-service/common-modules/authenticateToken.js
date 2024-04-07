@@ -6,7 +6,7 @@ function authenticateToken(req, res, next) {
 
     if (token === null) return res.sendStatus(401).json({error: 'No token provided'});
 
-    jwt.verify(token, process.env.JWT_GEHEIM, (err, user) => {
+    jwt.verify(token, process.env.JWT_STRING, (err, user) => {
         if (err){
             console.error(err);
             return res.sendStatus(403).json({error: 'Failed to authenticate token'});

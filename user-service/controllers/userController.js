@@ -41,7 +41,7 @@ async function login(req, res) {
         }
 
         const expiresIn = process.env.JWT_EXPIRE_TIME || '1h';
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_GEHEIM, { expiresIn: expiresIn });
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_STRING, { expiresIn: expiresIn });
 
         sendMessageToQueue(queueOptions.userLogin, user.toObject());
 
