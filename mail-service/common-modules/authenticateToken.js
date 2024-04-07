@@ -6,7 +6,7 @@ function authenticateToken(req, res, next) {
 
     if (token === null) return res.sendStatus(401); // if there isn't any token
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_GEHEIM, (err, user) => {
         if (err) return res.sendStatus(403);
         req.user = user;
         next(); // pass the execution off to whatever request the client intended
