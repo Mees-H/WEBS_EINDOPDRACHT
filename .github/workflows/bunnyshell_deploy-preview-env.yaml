@@ -21,7 +21,6 @@ jobs:
     concurrency: bns-deploy-${{ needs.load-artifact-from-reusable.outputs.pr-number }}
     if: ${{ github.event.workflow_run.conclusion == 'success' && needs.load-artifact-from-reusable.outputs.skip-deployment == 'false' }}
     with:
-      name: preview
       pr-number: ${{ needs.load-artifact-from-reusable.outputs.pr-number }}
       project-id: ${{ vars.BUNNYSHELL_PROJECT_ID }}
       cluster-id: ${{ vars.BUNNYSHELL_CLUSTER_ID }}
