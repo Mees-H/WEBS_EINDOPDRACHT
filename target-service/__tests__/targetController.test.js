@@ -22,6 +22,7 @@ Target.findByIdAndDelete = jest.fn().mockResolvedValue(true);
 jest.mock('../common-modules/messageQueueService', () => ({
     sendMessageToQueue: jest.fn(),
 }));
+
 jest.mock('../common-modules/imageService', () => ({
     uploadImage: jest.fn().mockResolvedValue('http://example.com/image.jpg'),
 }));
