@@ -171,7 +171,7 @@ components:
                         memory: '209715200'
             environment:
                 IMGUR_CLIENT_ID: 09fb55a80442763
-                JWT_STRING: veryLongAndSecureSecretKeyThatNoOneCanGuess
+                JWT_STRING: veryLongAndSecureKeyThatNoOneCanGuess
                 MONGODB_URL: 'mongodb://mongodb:27017/shots'
                 PORT: '3002'
                 RABBITMQ_URL: 'amqp://user:password@rabbitmq:5672'
@@ -199,7 +199,7 @@ components:
                         memory: '209715200'
             environment:
                 IMGUR_CLIENT_ID: 09fb55a80442763
-                JWT_STRING: veryLongAndSecureSecretKeyThatNoOneCanGuess
+                JWT_STRING: veryLongAndSecureKeyThatNoOneCanGuess
                 MONGODB_URL: 'mongodb://mongodb:27017/targets'
                 PORT: '3001'
                 RABBITMQ_URL: 'amqp://user:password@rabbitmq:5672'
@@ -228,7 +228,7 @@ components:
             environment:
                 IMGUR_CLIENT_ID: 09fb55a80442763
                 JWT_EXPIRE_TIME: 1d
-                JWT_STRING: veryLongAndSecureSecretKeyThatNoOneCanGuess
+                JWT_STRING: veryLongAndSecureKeyThatNoOneCanGuess
                 MONGODB_URL: 'mongodb://mongodb:27017/users'
                 PORT: '3003'
                 RABBITMQ_URL: 'amqp://user:password@rabbitmq:5672'
