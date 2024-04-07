@@ -1,21 +1,6 @@
 # docker-compose.yml
 version: '3'
 services:
-# Main app
-  # main-app:
-  #   build: ./proxy
-  #   ports:
-  #     - 3000:3000
-  #   depends_on:
-  #     - rabbitmq
-  #     - mongodb
-  #     - target-service
-  #     - sharpshooter-service
-  #   networks:
-  #     - default
-  #   volumes:
-  #     - ./proxy:/usr/src/app
-
 # Nginx
   nginx:
     image: nginx:latest
