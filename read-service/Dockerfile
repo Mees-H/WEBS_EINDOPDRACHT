@@ -1,8 +1,8 @@
 # Dockerfile
 FROM node:20
 WORKDIR /usr/src/app
-COPY package.json ./
+COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 3001
+EXPOSE 3006
 CMD [ "node", "index.js" ]
