@@ -61,7 +61,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "DS_PROMETHEUS",
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -154,7 +154,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "DS_PROMETHEUS",
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -244,7 +244,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "DS_PROMETHEUS",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -329,7 +329,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "DS_PROMETHEUS",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -408,7 +408,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "DS_PROMETHEUS",
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -516,7 +516,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "DS_PROMETHEUS",
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -609,7 +609,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "DS_PROMETHEUS",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -696,7 +696,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "DS_PROMETHEUS",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -783,7 +783,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "DS_PROMETHEUS",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -876,7 +876,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": "DS_PROMETHEUS",
         "definition": "label_values(nodejs_version_info, instance)",
         "hide": 0,
         "includeAll": true,

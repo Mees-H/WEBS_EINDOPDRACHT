@@ -217,7 +217,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - /prometheus:/etc/prometheus
+      - ./prometheus:/etc/prometheus
       - ./prometheus/prometheus-data:/prometheus
     depends_on:
       - target-service
@@ -260,7 +260,7 @@ services:
     ports:
       - 3008:3000
     volumes:
-       - ./grafana/grafana-data:/var/lib/grafana
+       - grafana-data:/var/lib/grafana
     networks:
       - default
 # Network
