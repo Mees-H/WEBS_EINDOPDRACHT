@@ -211,63 +211,8 @@ services:
         limits:
           cpus: '0.50'
           memory: 200M
-# Prometheus
-  prometheus:
-    image: prom/prometheus:latest
-    ports:
-      - 9090:9090
-    volumes:
-      - ./prometheus:/etc/prometheus
-      - ./prometheus/prometheus-data:/prometheus
-    depends_on:
-      - target-service
-      - sharpshooter-service
-      - user-service
-      - mail-service
-      - score-service
-      - read-service
-      - clock-service
-    networks:
-      - default
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 200M
-
-  db-exporter:
-    image: bitnami/mongodb-exporter:latest
-    ports:
-      - 9216:9216
-    environment:
-      - MONGODB_URI=mongodb://mongodb:27017
-    networks:
-      - default
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 200M
-    depends_on:
-      - mongodb
-# Grafana
-  grafana:
-    build:
-      context: ./grafana
-      dockerfile: Dockerfile
-    depends_on:
-      - prometheus
-    ports:
-      - 3008:3000
-    volumes:
-       - grafana-data:/var/lib/grafana
-    networks:
-      - default
 # Network
 networks:
   default:
     driver: bridge
 
-volumes:
-  prometheus-data:
-  grafana-data:
