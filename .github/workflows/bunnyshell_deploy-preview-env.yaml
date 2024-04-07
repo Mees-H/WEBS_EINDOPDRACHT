@@ -28,4 +28,4 @@ jobs:
       bunnyshell-yaml-contents: "${{ needs.load-artifact-from-reusable.outputs.bunnyshell-yaml-contents }}"
       comment-on-pr: true
     secrets:
-      bunnyshell-access-token: "3004:22a1fdca9ac235c91bbffeeedb980133"
+      bunnyshell-access-token: ${{ secrets.BUNNYSHELL_ACCESS_TOKEN }}
