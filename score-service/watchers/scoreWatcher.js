@@ -118,7 +118,7 @@ async function getScoresMail(message) {
         // Find all shots for the target in the database
         const shots = await Shot.find({ targetId: target._id });
 
-        sendMessageToQueue(queueNames.getMailForScores, shots);
+        sendMessageToQueue(queueNames.getMailForScores, {shots: shots, target: target});
         
         console.log('Scores mail sent successfully:', shots);
     } catch (error) {

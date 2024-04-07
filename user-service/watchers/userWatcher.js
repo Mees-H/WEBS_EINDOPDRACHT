@@ -5,9 +5,12 @@ const User = require('../models/user');
 
 async function getMailForScores(message) {
     // loop through all shots, get the mail of the shooter where the shooterId matches the id of the user
-    const shotData = JSON.parse(message);
+    const { shots: shotData } = JSON.parse(message);
+    const { target: targetData } = JSON.parse(message);
     var emails = [];
+    var ownerEmail = '';
     console.log('Shot data:', shotData);
+    console.log("target data: ", targetData);
     // Check if shotData exists and is an array
     if (shotData && Array.isArray(shotData)) {
         for (let shot of shotData) {
@@ -23,8 +26,15 @@ async function getMailForScores(message) {
     } else {
         console.error('shotData is not iterable');
     }
+    //get the email of the owner of the target
+    try {
+        const owner = await User.findById(targetData.ownerId);
+        ownerEmail = owner.email;
+    } catch (err) {
+        console.error('Error finding owner:', err);
+    }
     //send the emails and the shots to the mail service
-    sendMessageToQueue(queueNames.sendScoresMail, { emails, shots: shotData });
+    sendMessageToQueue(queueNames.sendScoresMail, { emails, ownerEmail, shots: shotData, target: targetData});
 }
 
 function start() {

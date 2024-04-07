@@ -2,4 +2,3 @@
 mongodb/*
 rabbitmq/*
 */.env
-envFiles/*
