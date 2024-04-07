@@ -15,7 +15,7 @@ jobs:
     with:
       pr-number: ${{ github.event.number || github.event.issue.number }}
       git-ref: refs/pull/${{ github.event.number || github.event.issue.number }}/head
-      allowed-users: ${{ vars.BUNNYSHELL_ALLOWED_USERS }}
+      allowed-users: "*"
       restricted-files: |
         .bunnyshell/*
       project-id: ${{ vars.BUNNYSHELL_PROJECT_ID }}
