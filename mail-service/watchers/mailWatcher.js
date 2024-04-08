@@ -76,9 +76,8 @@ function getHighestScoreShot(shots) {
         if (shot.score === 0) {
             continue;
         }
-        let computedScore = 100 - shot.score;
-        if (computedScore > highestScore) {
-            highestScore = computedScore;
+        if (shot.score > highestScore) {
+            highestScore = shot.score;
             highestScoreShot = shot;
         }
     }

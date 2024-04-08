@@ -75,9 +75,15 @@ async function calculateScore() {
             }
             
             const scoreResult = await compareImages(target.imageUrl, shot.imageUrl);
-            const score = scoreResult.result.distance;
 
-
+            const shotTime = new Date(shot.createdAt);
+            const targetCreationTime = new Date(target.createdAt); // assuming target.createdAt exists
+            const timeDifferenceInMinutes = (shotTime - targetCreationTime) / 1000 / 60;
+            
+            const score = 0;
+            if (scoreResult.result.distance !== 0) {
+                score = (1 / scoreResult.result.distance) * 1000 - timeDifferenceInMinutes;
+            }
             console.log('Score:', score);
             // Create a new message with the shotId and the calculated score
             const message = { shotId: shot._id, score: score };
