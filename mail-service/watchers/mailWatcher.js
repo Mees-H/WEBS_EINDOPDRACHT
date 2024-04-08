@@ -26,12 +26,31 @@ async function sendScoresMail(message) {
     // send an email to each email in the list with their score
     const messageContent = JSON.parse(message);
     if (messageContent.emails && messageContent.emails.length > 0) {
-        let highestScoreShot = getHighestScoreShot(messageContent.shots);
-        for (let email of messageContent.emails) {
-            let score = messageContent.shots[0].score;
+        // Group shots by shooterId
+        const shotsByShooter = messageContent.shots.reduce((acc, shot) => {
+            acc[shot.shooterId] = acc[shot.shooterId] || [];
+            acc[shot.shooterId].push(shot);
+            return acc;
+        }, {});
+
+        // Find the highest score for each shooter
+        const highestScoresByShooter = {};
+        for (let shooterId in shotsByShooter) {
+            highestScoresByShooter[shooterId] = shotsByShooter[shooterId].reduce((highestScore, shot) => {
+                return shot.score > highestScore.score ? shot : highestScore;
+            });
+        }
+
+        // Send an email to each shooter with their highest score
+        for (let i = 0; i < messageContent.emails.length; i++) {
+            let email = messageContent.emails[i];
+            let shooterId = messageContent.shots[i].shooterId;
+            let highestScoreShot = highestScoresByShooter[shooterId];
+
+            let score = highestScoreShot.score;
             let subject = "Je hebt een score!";
             let text = `Hallo, je hebt een score van ${score} behaald!`;
-            if (highestScoreShot.shooterId === messageContent.shots[0].shooterId) {
+            if (highestScoreShot === getHighestScoreShot(messageContent.shots)) {
                 subject = "Gefeliciteerd! Je hebt de hoogste score!";
                 text = `Hallo, je hebt de hoogste score van ${score} behaald!`;
             }
@@ -39,7 +58,7 @@ async function sendScoresMail(message) {
                 from: process.env.SENDER_EMAIL,
                 to: email,
                 subject: subject,
-                html: `<p>${text}</p></br><p>Target foto:</p><img src="${messageContent.target.imageUrl}" alt="target image" style="width: 200px; height: 200px;"/> </br> <p>Sharpshooter foto:</p><img src="${messageContent.shots[0].imageUrl}" alt="shot image" style="width: 200px; height: 200px;"/>`
+                html: `<p>${text}</p></br><p>Target foto:</p><img src="${messageContent.target.imageUrl}" alt="target image" style="width: 200px; height: 200px;"/> </br> <p>Sharpshooter foto:</p><img src="${highestScoreShot.imageUrl}" alt="shot image" style="width: 200px; height: 200px;"/>`
             };
 
             console.log('mailOptions.to:', mailOptions.to);
@@ -76,9 +95,8 @@ function getHighestScoreShot(shots) {
         if (shot.score === 0) {
             continue;
         }
-        let computedScore = 100 - shot.score;
-        if (computedScore > highestScore) {
-            highestScore = computedScore;
+        if (shot.score > highestScore) {
+            highestScore = shot.score;
             highestScoreShot = shot;
         }
     }
